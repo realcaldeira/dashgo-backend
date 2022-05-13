@@ -168,30 +168,24 @@ app.get('/me', checkAuthMiddleware, (request, response) => {
 });
 
 app.get('/users/:page', (request, response) => {
-  const email = request.user;
-
-  const user = users.get(email);
+  const { authorization } = request.headers;
   
-  // if(user){
-    const page = request.params;
-        // const total = schema.all('user').length;
-        // const pageStart = (Number(page) - 1) * Number(per_page);
-        // const pageEnd = pageStart + Number(per_page);
+  if(authorization){
+    var page = request.params.page || 1
+    const total = 10
 
     const database = []
     
-    for(let i=0; i <= 50; i++){
-      database.push({
-        name: faker.name.findName(),
-        email: faker.internet.email().toLowerCase(),
-        date: faker.date.recent(10),
-      })
-    // }
-  
+    for(let i= 1; i <= total; i++){
+        database.push({
+          name: faker.name.findName(),
+          email: faker.internet.email().toLowerCase(),
+          date: faker.date.recent(10),
+        })
+    }
     return response.status(200).json(database)
-    return response.status(200).json(page)
   }
-  // return response.status(400).json({ message: 'Required token'})
+  return response.status(401).json({ message: 'Token not present.'})
 })
 
 app.listen(3333);
