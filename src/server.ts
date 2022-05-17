@@ -167,17 +167,17 @@ app.get('/me', checkAuthMiddleware, (request, response) => {
   })
 });
 
-app.get('/users/:page', (request, response) => {
+app.get('/users', (request, response) => {
   const { authorization } = request.headers;
   
   if(authorization){
-    var page = request.params.page || 1
     const total = 10
 
     const database = []
     
     for(let i= 1; i <= total; i++){
         database.push({
+          id: i,
           name: faker.name.findName(),
           email: faker.internet.email().toLowerCase(),
           date: faker.date.recent(10),
